@@ -1,0 +1,36 @@
+#root {
+  width: 100vw;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.hug {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.name-enter {
+  opacity: 0;
+}
+
+.name-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+}
+
+.name-exit {
+  opacity: 1;
+}
+
+.name-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+}
