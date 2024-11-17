@@ -1,27 +1,88 @@
-<script setup>
+<script>
 import SideControls from './components/SideControls.vue';
-import Wheel from './components/Wheel.vue';
 
+export default {
+  components: {
+    SideControls,
+  },
+  data() {
+    return {
+      names: [],
+      size: 200, // Circle size
+      colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33'], // Section colors
+    };
+  },
+  computed: {
+    angles() {
+      const total = this.names.length;
+      const anglePerSection = 360 / total;
+      return this.names.map((_, index) => {
+        return {
+          start: index * anglePerSection,
+          end: (index + 1) * anglePerSection,
+        };
+      });
+    },
+  },
+  methods: {
+    addName(name) {
+      if (name.trim()) {
+        this.names.push(name.trim());
+      }
+    },
+    generatePath(startAngle, endAngle) {
+      const x1 = Math.cos((Math.PI / 180) * startAngle) * 100;
+      const y1 = Math.sin((Math.PI / 180) * startAngle) * 100;
+      const x2 = Math.cos((Math.PI / 180) * endAngle) * 100;
+      const y2 = Math.sin((Math.PI / 180) * endAngle) * 100;
+      return `M 0 0 L ${x1} ${y1} A 100 100 0 ${
+        endAngle - startAngle > 180 ? 1 : 0
+      } 1 ${x2} ${y2} Z`;
+    },
+  },
+};
 </script>
 
 <template>
-  <div class="container">
-    <SideControls />
-    <Wheel />
+  <div class="spinner-app">
+    <SideControls 
+      :names="names" 
+      @add-name="addName"
+    />
+    <div class="wheel-container">
+      <svg 
+        viewBox="0 0 200 200" 
+        :width="size" 
+        :height="size"
+        class="wheel"
+      >
+        <g transform="translate(100, 100)">
+          <path 
+            v-for="(angle, index) in angles" 
+            :key="index"
+            :d="generatePath(angle.start, angle.end)"
+            :fill="colors[index % colors.length]"
+          />
+        </g>
+      </svg>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+
+
+<style>
+.spinner-app {
+  text-align: center;
+  font-family: Arial, sans-serif;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.wheel-container {
+  margin: 20px auto;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.wheel {
+  border: 2px solid #000;
+  border-radius: 50%;
 }
 </style>

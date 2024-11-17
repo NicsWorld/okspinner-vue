@@ -1,8 +1,8 @@
-<!-- <script setup>
+<!-- <!-- <script setup>
 
 </script> -->
 
-<template>
+<!-- <template>
     <div class="controls">
         <div class="inner-box">
             inner box
@@ -33,4 +33,134 @@
         border-top-right-radius: 4% 95%;
         border-bottom-right-radius: 92% 6%;
     }
-</style>
+</style> -->
+
+<!-- <template>
+    <div class="controls">
+      <input 
+        type="text" 
+        v-model="newValue" 
+        placeholder="Add a value"
+        @keyup.enter="emitAddValue"
+        onchange="emitAddValue"
+      />
+      <button @click="emitAddValue">Add Value</button>
+      <ul>
+        <li v-for="(value, index) in values" :key="index">{{ value }}</li>
+      </ul>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      circleValues: {
+        type: Array,
+        required: true,
+      },
+    },
+    data() {
+      return {
+        newValue: '',
+      };
+    },
+    methods: {
+      emitAddValue() {
+        if (this.newValue.trim()) {
+          this.$emit('add-value', this.newValue);
+          this.newValue = '';
+        }
+      },
+    },
+  };
+  </script>
+  
+  <style>
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        height: 100%;
+        width: 250px;
+        border: solid black;
+        border-color: black;
+        background-color: #d3d3d3;
+        border-color: black;
+        border-width: 3px 4px 3px 5px;
+        background-color: var(--main-red);
+        border-color: black;
+        border-width: 3px 4px 3px 5px;
+        position: absolute;
+        left: 0;
+        border-top-right-radius: 4% 95%;
+        border-top-right-radius: 4% 95%;
+        border-bottom-right-radius: 92% 6%;
+    }
+  </style>
+   -->
+
+   <template>
+    <div class="controls">
+      <input 
+        type="text" 
+        v-model="newName" 
+        placeholder="Add a name"
+        @keyup.enter="emitAddName"
+        @keydown="emitAddName"
+      />
+      <button @click="emitAddName">Add Name</button>
+      <ul>
+        <li v-for="(name, index) in names" :key="index">{{ name }}</li>
+      </ul>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      names: {
+        type: Array,
+        required: true,
+      },
+    },
+    data() {
+      return {
+        newName: '',
+      };
+    },
+    methods: {
+      emitAddName() {
+        if (this.newName.trim()) {
+          this.$emit('add-name', this.newName);
+          this.newName = '';
+        }
+      },
+    },
+  };
+  </script>
+  
+  <style>
+.controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        height: 100%;
+        width: 250px;
+        border: solid black;
+        border-color: black;
+        background-color: #d3d3d3;
+        border-color: black;
+        border-width: 3px 4px 3px 5px;
+        background-color: var(--main-red);
+        border-color: black;
+        border-width: 3px 4px 3px 5px;
+        position: absolute;
+        left: 0;
+        border-top-right-radius: 4% 95%;
+        border-top-right-radius: 4% 95%;
+        border-bottom-right-radius: 92% 6%;
+    }
+  </style>
+  
