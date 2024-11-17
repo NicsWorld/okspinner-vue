@@ -24,21 +24,13 @@
         background-color: #d3d3d3;
         border-color: black;
         border-width: 3px 4px 3px 5px;
-        /* border-radius:95% 4% 92% 5%/4% 95% 6% 95%; */
-        /* transform: rotate(2deg); */
-        /* background-color: #d3d3d3; */
         background-color: var(--main-red);
         border-color: black;
         border-width: 3px 4px 3px 5px;
-        /* border-radius: 95% 4% 92% 5% / 4% 95% 6% 95%; */
-        /* transform: rotate(2deg); */
         position: absolute;
         left: 0;
         border-top-right-radius: 4% 95%;
         border-top-right-radius: 4% 95%;
         border-bottom-right-radius: 92% 6%;
-    }
-    .inner-box {
-
     }
 </style>
