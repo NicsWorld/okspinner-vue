@@ -1,14 +1,13 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
 import SideControls from './components/SideControls.vue';
+import Wheel from './components/Wheel.vue';
 
 </script>
-<!-- border-width: 3px 4px 3px 5px;
-border-radius:95% 4% 92% 5%/4% 95% 6% 95%;
-transform: rotate(2deg); -->
+
 <template>
   <div class="container">
     <SideControls />
+    <Wheel />
   </div>
 </template>
 
