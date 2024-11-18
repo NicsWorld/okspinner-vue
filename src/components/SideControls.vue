@@ -99,10 +99,24 @@
     }
   </style>
    -->
-
+<script>
+export default {
+  data() {
+    return {
+      text: '',
+    };
+  },
+  methods: {
+    updateNames() {
+      const names = this.text.split('\n').map(name => name.trim()).filter(name => name);
+      this.$emit('update-names', names);
+    },
+  },
+};
+</script>
    <template>
     <div class="controls">
-      <input 
+      <!-- <input 
         type="text" 
         v-model="newName" 
         placeholder="Add a name"
@@ -112,11 +126,18 @@
       <button @click="emitAddName">Add Name</button>
       <ul>
         <li v-for="(name, index) in names" :key="index">{{ name }}</li>
-      </ul>
+      </ul> -->
+      <div class="text-area">
+    <textarea 
+      v-model="text" 
+      @input="updateNames" 
+      placeholder="Enter names, one per line"
+    ></textarea>
+  </div>
     </div>
   </template>
   
-  <script>
+  <!-- <script>
   export default {
     props: {
       names: {
@@ -138,7 +159,7 @@
       },
     },
   };
-  </script>
+  </script> -->
   
   <style>
 .controls {
@@ -162,5 +183,14 @@
         border-top-right-radius: 4% 95%;
         border-bottom-right-radius: 92% 6%;
     }
+    .text-area {
+  margin-bottom: 20px;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 14px;
+}
   </style>
   
