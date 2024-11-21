@@ -20,7 +20,7 @@
       return {
         names: [],
         newName: '',
-        size: 200, // Circle size
+        size: 600,
         colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33'], // Section colors
       };
     },
@@ -55,7 +55,7 @@
     },
   };
   </script>
-  
+
 <template>
     <div class="spinner-app">
       <input 
@@ -67,7 +67,7 @@
       <button @click="addName">Add Name</button>
       <div class="wheel-container">
         <svg 
-          viewBox="0 0 200 200" 
+          viewBox="0 0 600 600" 
           :width="size" 
           :height="size"
           class="wheel"

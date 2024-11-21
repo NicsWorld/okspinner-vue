@@ -1,5 +1,5 @@
-<!-- <script>
-import SideControls from './components/SideControls.vue';
+<script>
+import SideControls from "./components/SideControls.vue";
 
 export default {
   components: {
@@ -8,36 +8,63 @@ export default {
   data() {
     return {
       names: [],
-      size: 200, // Circle size
-      colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33'], // Section colors
+      size: 600,
+      colors: ["#FF5733", "#33FF57", "#3357FF", "#F3FF33"],
+      spin: 0, // Current spin rotation angle
+      spinning: false, // Animation state
     };
   },
   computed: {
     angles() {
-      const total = this.names.length;
+      const total = this.names.length || 1;
       const anglePerSection = 360 / total;
-      return this.names.map((_, index) => {
-        return {
-          start: index * anglePerSection,
-          end: (index + 1) * anglePerSection,
-        };
-      });
+      return this.names.map((_, index) => ({
+        start: index * anglePerSection,
+        end: (index + 1) * anglePerSection,
+      }));
+    },
+    spinTransform() {
+      // Rotate the wheel smoothly by applying the spin angle
+      return `translate(${this.size / 2}, ${this.size / 2}) rotate(${
+        this.spin
+      })`;
     },
   },
   methods: {
-    addName(name) {
-      if (name.trim()) {
-        this.names.push(name.trim());
-      }
+    updateNames(newNames) {
+      this.names = newNames;
     },
     generatePath(startAngle, endAngle) {
-      const x1 = Math.cos((Math.PI / 180) * startAngle) * 100;
-      const y1 = Math.sin((Math.PI / 180) * startAngle) * 100;
-      const x2 = Math.cos((Math.PI / 180) * endAngle) * 100;
-      const y2 = Math.sin((Math.PI / 180) * endAngle) * 100;
-      return `M 0 0 L ${x1} ${y1} A 100 100 0 ${
+      const radius = this.size / 2;
+      const x1 = Math.cos((Math.PI / 180) * startAngle) * radius;
+      const y1 = Math.sin((Math.PI / 180) * startAngle) * radius;
+      const x2 = Math.cos((Math.PI / 180) * endAngle) * radius;
+      const y2 = Math.sin((Math.PI / 180) * endAngle) * radius;
+      return `M 0 0 L ${x1} ${y1} A ${radius} ${radius} 0 ${
         endAngle - startAngle > 180 ? 1 : 0
       } 1 ${x2} ${y2} Z`;
+    },
+    calculateTextPosition(startAngle, endAngle) {
+      const midAngle = (startAngle + endAngle) / 2;
+      const radius = this.size / 4;
+      const x = Math.cos((Math.PI / 180) * midAngle) * radius;
+      const y = Math.sin((Math.PI / 180) * midAngle) * radius;
+      return { x, y };
+    },
+    spinWheel() {
+      if (this.spinning) return; // Prevent double clicks
+      this.spinning = true;
+
+      // Generate random spin angle (720° to 1080°) for smooth spinning
+      const randomSpins = 720 + Math.random() * 360;
+      this.spin += randomSpins;
+
+      // Wait for the transition to complete before resetting state
+      setTimeout(() => {
+        this.spinning = false;
+        // Ensure spin value doesn't grow infinitely by resetting to modulo 360
+        // this.spin %= 360;
+      }, 2000); // Match transition duration
     },
   },
 };
@@ -45,67 +72,23 @@ export default {
 
 <template>
   <div class="spinner-app">
-    <SideControls 
-      :names="names" 
-      @add-name="addName"
-    />
-    <div class="wheel-container">
-      <svg 
-        viewBox="0 0 200 200" 
-        :width="size" 
-        :height="size"
-        class="wheel"
-      >
-        <g transform="translate(100, 100)">
-          <path 
-            v-for="(angle, index) in angles" 
-            :key="index"
-            :d="generatePath(angle.start, angle.end)"
-            :fill="colors[index % colors.length]"
-          />
-        </g>
-      </svg>
-    </div>
-  </div>
-</template>
-
-
-
-<style>
-.spinner-app {
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-
-.wheel-container {
-  margin: 20px auto;
-}
-
-.wheel {
-  border: 2px solid #000;
-  border-radius: 50%;
-}
-</style> -->
-<template>
-  <div class="spinner-app">
-    <!-- <TextAreaComponent @update-names="updateNames" /> -->
     <SideControls @update-names="updateNames" />
     <div class="wheel-container">
-      <svg 
-        viewBox="0 0 200 200" 
-        :width="size" 
+      <svg
+        :viewBox="`0 0 ${size} ${size}`"
+        :width="size"
         :height="size"
         class="wheel"
       >
-        <g transform="translate(100, 100)">
-          <path 
-            v-for="(angle, index) in angles" 
+        <g :transform="spinTransform" class="wheel-group">
+          <path
+            v-for="(angle, index) in angles"
             :key="index"
             :d="generatePath(angle.start, angle.end)"
             :fill="colors[index % colors.length]"
           />
-          <text 
-            v-for="(name, index) in names" 
+          <text
+            v-for="(name, index) in names"
             :key="index"
             :x="calculateTextPosition(angles[index].start, angles[index].end).x"
             :y="calculateTextPosition(angles[index].start, angles[index].end).y"
@@ -118,57 +101,9 @@ export default {
         </g>
       </svg>
     </div>
+    <button @click="spinWheel" class="spin-button">Spin!</button>
   </div>
 </template>
-
-<script>
-import SideControls from './components/SideControls.vue';
-
-export default {
-  components: {
-    SideControls,
-  },
-  data() {
-    return {
-      names: [],
-      size: 200, // Circle size
-      colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33'], // Section colors
-    };
-  },
-  computed: {
-    angles() {
-      const total = this.names.length;
-      const anglePerSection = 360 / total;
-      return this.names.map((_, index) => {
-        return {
-          start: index * anglePerSection,
-          end: (index + 1) * anglePerSection,
-        };
-      });
-    },
-  },
-  methods: {
-    updateNames(names) {
-      this.names = names;
-    },
-    generatePath(startAngle, endAngle) {
-      const x1 = Math.cos((Math.PI / 180) * startAngle) * 100;
-      const y1 = Math.sin((Math.PI / 180) * startAngle) * 100;
-      const x2 = Math.cos((Math.PI / 180) * endAngle) * 100;
-      const y2 = Math.sin((Math.PI / 180) * endAngle) * 100;
-      return `M 0 0 L ${x1} ${y1} A 100 100 0 ${
-        endAngle - startAngle > 180 ? 1 : 0
-      } 1 ${x2} ${y2} Z`;
-    },
-    calculateTextPosition(startAngle, endAngle) {
-      const midAngle = (startAngle + endAngle) / 2;
-      const x = Math.cos((Math.PI / 180) * midAngle) * 50; // Move text to the center of each section
-      const y = Math.sin((Math.PI / 180) * midAngle) * 50;
-      return { x, y };
-    },
-  },
-};
-</script>
 
 <style>
 .spinner-app {
@@ -183,5 +118,25 @@ export default {
 .wheel {
   border: 2px solid #000;
   border-radius: 50%;
+}
+
+.wheel-group {
+  transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth spin effect */
+}
+
+.spin-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #008cba;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.spin-button:hover {
+  background-color: #005f75;
 }
 </style>
