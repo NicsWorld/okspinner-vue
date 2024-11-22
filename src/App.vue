@@ -9,7 +9,14 @@ export default {
     return {
       names: [],
       size: 600,
-      colors: ["#FF5733", "#33FF57", "#3357FF", "#F3FF33"],
+      colors: [
+        "rgb(255, 255, 224)",
+        "rgb(255, 153, 153)",
+        "rgb(173, 216, 230)",
+        "rgb(152, 251, 152)",
+        "rgb(255, 229, 180)",
+        "rgb(204, 204, 255)",
+      ],
       spin: 0, // Current spin rotation angle
       spinning: false, // Animation state
     };
@@ -62,7 +69,7 @@ export default {
       // Wait for the transition to complete before resetting state
       setTimeout(() => {
         this.spinning = false;
-        // Ensure spin value doesn't grow infinitely by resetting to modulo 360
+        // hmmmm
         // this.spin %= 360;
       }, 2000); // Match transition duration
     },
@@ -94,7 +101,7 @@ export default {
             :y="calculateTextPosition(angles[index].start, angles[index].end).y"
             text-anchor="middle"
             alignment-baseline="middle"
-            font-size="10"
+            font-size="16"
           >
             {{ name }}
           </text>
@@ -109,6 +116,7 @@ export default {
 .spinner-app {
   text-align: center;
   font-family: Arial, sans-serif;
+  font-size: 2rem;
 }
 
 .wheel-container {
@@ -121,7 +129,7 @@ export default {
 }
 
 .wheel-group {
-  transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth spin effect */
+  transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .spin-button {
