@@ -158,6 +158,7 @@ export default {
   border-width: 3px 4px 3px 5px;
   position: absolute;
   left: 0;
+  top: 6px;
   border-top-right-radius: 4% 95%;
   border-top-right-radius: 4% 95%;
   border-bottom-right-radius: 92% 6%;
