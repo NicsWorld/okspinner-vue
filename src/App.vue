@@ -9,29 +9,28 @@ export default {
     return {
       names: [],
       size: 600,
-      colors: [
-        "rgb(255, 255, 224)",
-        "rgb(255, 153, 153)",
-        "rgb(173, 216, 230)",
-        "rgb(152, 251, 152)",
-        "rgb(255, 229, 180)",
-        "rgb(204, 204, 255)",
-      ],
+      colors: ["#7CFC00", "#FF0000", "#0000FF"],
+      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
       spin: 0, // Current spin rotation angle
       spinning: false, // Animation state
+      selectedName: null, // Selected name after spin
     };
   },
   computed: {
     angles() {
       const total = this.names.length || 1;
       const anglePerSection = 360 / total;
-      return this.names.map((_, index) => ({
-        start: index * anglePerSection,
-        end: (index + 1) * anglePerSection,
-      }));
+
+      return this.names.map((_, index) => {
+        const color = this.colors[index % this.colors.length];
+        return {
+          start: index * anglePerSection,
+          end: (index + 1) * anglePerSection,
+          color,
+        };
+      });
     },
     spinTransform() {
-      // Rotate the wheel smoothly by applying the spin angle
       return `translate(${this.size / 2}, ${this.size / 2}) rotate(${
         this.spin
       })`;
@@ -40,7 +39,11 @@ export default {
   methods: {
     updateNames(newNames) {
       this.names = newNames;
+      if (newNames.length === this.colors.length + 1) {
+        this.colors = this.colors.reverse();
+      }
     },
+
     generatePath(startAngle, endAngle) {
       const radius = this.size / 2;
       const x1 = Math.cos((Math.PI / 180) * startAngle) * radius;
@@ -51,6 +54,7 @@ export default {
         endAngle - startAngle > 180 ? 1 : 0
       } 1 ${x2} ${y2} Z`;
     },
+
     calculateTextPosition(startAngle, endAngle) {
       const midAngle = (startAngle + endAngle) / 2;
       const radius = this.size / 4;
@@ -58,20 +62,46 @@ export default {
       const y = Math.sin((Math.PI / 180) * midAngle) * radius;
       return { x, y };
     },
-    spinWheel() {
-      if (this.spinning) return; // Prevent double clicks
-      this.spinning = true;
 
-      // Generate random spin angle (720° to 1080°) for smooth spinning
+    spinWheel() {
+      if (this.spinning) return;
+      this.spinning = true;
+      this.selectedName = null;
+
+      // Random spin between 720° and 1080° (2-3 full rotations) + random offset
       const randomSpins = 720 + Math.random() * 360;
       this.spin += randomSpins;
 
-      // Wait for the transition to complete before resetting state
       setTimeout(() => {
         this.spinning = false;
-        // hmmmm
-        // this.spin %= 360;
-      }, 2000); // Match transition duration
+
+        // Calculate the final angle of the wheel
+        const finalAngle = ((this.spin % 360) + 360) % 360; // Normalize to 0-360
+
+        // Adjust for the pointer at the 6 o'clock position
+        const pointerAngle = (360 - finalAngle + 270) % 360; // Align pointer to 6 o'clock
+
+        // Determine which section the pointer lands on
+        const sectionAngle = 360 / this.names.length;
+        let selectedIndex = -1;
+
+        for (let i = 0; i < this.names.length; i++) {
+          const start = i * sectionAngle;
+          const end = (i + 1) * sectionAngle;
+          if (pointerAngle >= start && pointerAngle < end) {
+            selectedIndex = i;
+            break;
+          }
+        }
+
+        // Fallback if something goes wrong
+        if (selectedIndex === -1) {
+          selectedIndex = 0;
+        }
+
+        // Set the selected name
+        this.selectedName = this.names[selectedIndex];
+      }, 2000); // Match the spin animation duration
     },
   },
 };
@@ -92,7 +122,7 @@ export default {
             v-for="(angle, index) in angles"
             :key="index"
             :d="generatePath(angle.start, angle.end)"
-            :fill="colors[index % colors.length]"
+            :fill="angle.color"
           />
           <text
             v-for="(name, index) in names"
@@ -101,12 +131,21 @@ export default {
             :y="calculateTextPosition(angles[index].start, angles[index].end).y"
             text-anchor="middle"
             alignment-baseline="middle"
-            font-size="16"
+            font-size="20"
           >
             {{ name }}
           </text>
         </g>
+        <!-- Pointer repositioned to the 6 o'clock position -->
+        <polygon
+          points="295,590 305,590 300,570"
+          fill="black"
+          class="pointer"
+        />
       </svg>
+    </div>
+    <div class="result-ticket" v-if="selectedName">
+      Winner: {{ selectedName }}
     </div>
     <button @click="spinWheel" class="spin-button">Spin!</button>
   </div>
@@ -116,11 +155,11 @@ export default {
 .spinner-app {
   text-align: center;
   font-family: Arial, sans-serif;
-  font-size: 2rem;
 }
 
 .wheel-container {
   margin: 20px auto;
+  position: relative;
 }
 
 .wheel {
@@ -130,6 +169,12 @@ export default {
 
 .wheel-group {
   transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.pointer {
+  fill: #000; /* Black color for contrast */
+  stroke: #fff; /* White border for visibility */
+  stroke-width: 2px;
 }
 
 .spin-button {
@@ -146,5 +191,12 @@ export default {
 
 .spin-button:hover {
   background-color: #005f75;
+}
+
+.result-ticket {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #008cba;
 }
 </style>
