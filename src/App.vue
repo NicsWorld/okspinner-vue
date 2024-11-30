@@ -1,9 +1,10 @@
 <script>
 import SideControls from "./components/SideControls.vue";
-
+import WinnerModal from "./components/WinnerModal.vue";
 export default {
   components: {
     SideControls,
+    WinnerModal,
   },
   data() {
     return {
@@ -54,6 +55,17 @@ export default {
   methods: {
     updateNames(newNames) {
       this.names = newNames;
+    },
+
+    closeModal() {
+      this.selectedName = null;
+    },
+
+    removeWinner() {
+      // remove the winner from the list of names
+      this.names = this.names.filter((name) => name !== this.selectedName);
+      this.updateNames(this.names);
+      this.selectedName = null;
     },
 
     generatePath(startAngle, endAngle) {
@@ -116,7 +128,13 @@ export default {
 
 <template>
   <div class="spinner-app">
-    <SideControls @update-names="updateNames" />
+    <SideControls @update-names="updateNames" :names="names" />
+    <WinnerModal
+      v-if="selectedName"
+      :winner="selectedName"
+      @close-modal="closeModal"
+      @remove-winner="removeWinner"
+    />
     <div class="wheel-container">
       <svg
         :viewBox="`0 0 ${size} ${size}`"
