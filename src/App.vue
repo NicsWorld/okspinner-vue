@@ -10,10 +10,9 @@ export default {
       names: [],
       size: 600,
       colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
-      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
-      spin: 0, // Current spin rotation angle
-      spinning: false, // Animation state
-      selectedName: null, // Selected name after spin
+      spin: 0,
+      spinning: false,
+      selectedName: null,
     };
   },
   computed: {
@@ -21,12 +20,28 @@ export default {
       const total = this.names.length || 1;
       const anglePerSection = 360 / total;
 
+      let colorsToAssign = [...this.colors];
+      const assignedColors = [];
+
+      // Fill the wheel sections with colors, ensuring no adjacent sections are the same color
+      for (let i = 0; i < total; i++) {
+        const color = colorsToAssign[i % colorsToAssign.length];
+        assignedColors.push(color);
+      }
+
+      // Check if the first and last colors are the same, and swap if necessary
+      if (assignedColors[0] === assignedColors[assignedColors.length - 1]) {
+        // Swap the last color with a different color from the available colors
+        let newColor = this.colors.find((c) => c !== assignedColors[0]);
+        assignedColors[assignedColors.length - 1] = newColor;
+      }
+
+      // Assign color to each section
       return this.names.map((_, index) => {
-        const color = this.colors[index % this.colors.length];
         return {
           start: index * anglePerSection,
           end: (index + 1) * anglePerSection,
-          color,
+          color: assignedColors[index],
         };
       });
     },
@@ -39,9 +54,6 @@ export default {
   methods: {
     updateNames(newNames) {
       this.names = newNames;
-      if (newNames.length === this.colors.length + 1) {
-        this.colors = this.colors.reverse();
-      }
     },
 
     generatePath(startAngle, endAngle) {
@@ -75,13 +87,8 @@ export default {
       setTimeout(() => {
         this.spinning = false;
 
-        // Calculate the final angle of the wheel
         const finalAngle = ((this.spin % 360) + 360) % 360; // Normalize to 0-360
-
-        // Adjust for the pointer at the 6 o'clock position
         const pointerAngle = (360 - finalAngle + 270) % 360; // Align pointer to 6 o'clock
-
-        // Determine which section the pointer lands on
         const sectionAngle = 360 / this.names.length;
         let selectedIndex = -1;
 
