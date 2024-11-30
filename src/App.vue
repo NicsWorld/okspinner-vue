@@ -9,8 +9,19 @@ export default {
     return {
       names: [],
       size: 600,
-      colors: ["#7CFC00", "#FF0000", "#0000FF"],
-      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
+      // colors: ["#7CFC00", "#FF0000", "#0000FF"],
+      colors: [
+        "#7CFC00",
+        "#FF0000",
+        "#0000FF",
+        "#FFFF00",
+        "#5D3FD3",
+        "#FFFF00",
+        "#0000FF",
+        "#7CFC00",
+        "#0000FF",
+        "#FF0000",
+      ],
       spin: 0, // Current spin rotation angle
       spinning: false, // Animation state
       selectedName: null, // Selected name after spin
@@ -39,9 +50,9 @@ export default {
   methods: {
     updateNames(newNames) {
       this.names = newNames;
-      if (newNames.length === this.colors.length + 1) {
-        this.colors = this.colors.reverse();
-      }
+      // if (newNames.length === this.colors.length + 1) {
+      //   this.colors = this.colors.reverse();
+      // }
     },
 
     generatePath(startAngle, endAngle) {
