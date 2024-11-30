@@ -9,19 +9,8 @@ export default {
     return {
       names: [],
       size: 600,
-      // colors: ["#7CFC00", "#FF0000", "#0000FF"],
-      colors: [
-        "#7CFC00",
-        "#FF0000",
-        "#0000FF",
-        "#FFFF00",
-        "#5D3FD3",
-        "#FFFF00",
-        "#0000FF",
-        "#7CFC00",
-        "#0000FF",
-        "#FF0000",
-      ],
+      colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
+      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
       spin: 0, // Current spin rotation angle
       spinning: false, // Animation state
       selectedName: null, // Selected name after spin
@@ -50,9 +39,9 @@ export default {
   methods: {
     updateNames(newNames) {
       this.names = newNames;
-      // if (newNames.length === this.colors.length + 1) {
-      //   this.colors = this.colors.reverse();
-      // }
+      if (newNames.length === this.colors.length + 1) {
+        this.colors = this.colors.reverse();
+      }
     },
 
     generatePath(startAngle, endAngle) {
@@ -148,11 +137,7 @@ export default {
           </text>
         </g>
         <!-- Pointer repositioned to the 6 o'clock position -->
-        <polygon
-          points="295,590 305,590 300,570"
-          fill="black"
-          class="pointer"
-        />
+        <polygon points="295,10 305,10 300,30" fill="black" class="pointer" />
       </svg>
     </div>
     <div class="result-ticket" v-if="selectedName">

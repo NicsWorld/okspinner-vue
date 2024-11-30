@@ -18,17 +18,6 @@ export default {
 </script>
 <template>
   <div class="controls">
-    <!-- <input 
-        type="text" 
-        v-model="newName" 
-        placeholder="Add a name"
-        @keyup.enter="emitAddName"
-        @keydown="emitAddName"
-      />
-      <button @click="emitAddName">Add Name</button>
-      <ul>
-        <li v-for="(name, index) in names" :key="index">{{ name }}</li>
-      </ul> -->
     <div class="text-area">
       <textarea
         v-model="text"
