@@ -1,7 +1,6 @@
 <script>
 import SideControls from "./components/SideControls.vue";
 import WinnerModal from "./components/WinnerModal.vue";
-// import spinSound from "./assets/spin.wav";
 
 export default {
   components: {
@@ -12,15 +11,6 @@ export default {
     return {
       names: [],
       size: 600,
-      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
-      // colors: [
-      //   "rgb(204, 204, 255)",
-      //   "rgb(255, 229, 180)",
-      //   "rgb(152, 251, 152)",
-      //   "rgb(173, 216, 230)",
-      //   "rgb(255, 153, 153)",
-      //   "rgb(255, 255, 224)",
-      // ],
       colors: ["#1F51FF", "#39ff14", "#ff073a", "#FFEA00"],
       spin: 0,
       spinning: false,
@@ -99,7 +89,7 @@ export default {
       this.spinning = true;
       this.selectedName = null;
 
-      // bad
+      // bad - need to find a better spin sound
       // const sound = new Audio(spinSound);
       // sound.play();
 
@@ -144,6 +134,7 @@ export default {
       @close-modal="closeModal"
       @remove-winner="removeWinner"
     />
+
     <div class="wheel-container">
       <svg
         :viewBox="`0 0 ${size} ${size}`"
@@ -191,9 +182,7 @@ export default {
 }
 
 .wheel {
-  /* border: 2px solid #000; */
   border-radius: 50%;
-
   border: solid black;
   border-color: black;
   border-width: 2px 4px 3px 5px;

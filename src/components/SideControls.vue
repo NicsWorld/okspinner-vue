@@ -1,10 +1,13 @@
 <script>
 export default {
+  props: ["names"],
+
   data() {
     return {
-      text: "",
+      text: this.names.join("\n"), // Initialize text with the names passed as a prop
     };
   },
+
   methods: {
     updateNames() {
       const names = this.text
@@ -12,6 +15,11 @@ export default {
         .map((name) => name.trim())
         .filter((name) => name);
       this.$emit("update-names", names);
+    },
+    reset() {
+      this.text = "";
+      this.updateNames();
+      this.$emit("reset");
     },
   },
 };
@@ -25,13 +33,16 @@ export default {
         placeholder="Enter names, one per line"
       ></textarea>
     </div>
+
+    <button class="resetButton" @click="reset">Reset</button>
   </div>
 </template>
 
 <style>
 .controls {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 0 1rem;
   height: 100%;
@@ -42,13 +53,23 @@ export default {
   border-width: 3px 4px 3px 5px;
   position: absolute;
   left: 0;
-  top: 6px;
+  top: 6 px;
   border-top-right-radius: 4% 95%;
   border-top-right-radius: 4% 95%;
   border-bottom-right-radius: 92% 6%;
 }
 .text-area {
   margin-bottom: 20px;
+}
+.resetButton {
+  border: solid black;
+  border-color: black;
+  border-width: 3px 4px 3px 5px;
+  border-top-right-radius: 4% 95%;
+  border-top-right-radius: 4% 95%;
+  border-bottom-right-radius: 92% 6%;
+  background-color: var(--main-green);
+  color: black;
 }
 textarea {
   width: 100%;
