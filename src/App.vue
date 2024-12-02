@@ -1,6 +1,8 @@
 <script>
 import SideControls from "./components/SideControls.vue";
 import WinnerModal from "./components/WinnerModal.vue";
+import spinSound from "./assets/spin.wav";
+
 export default {
   components: {
     SideControls,
@@ -91,6 +93,10 @@ export default {
       if (this.spinning) return;
       this.spinning = true;
       this.selectedName = null;
+
+      // // in assets folder, add a sound file named spin.wav
+      // const sound = new Audio(spinSound);
+      // sound.play();
 
       // Random spin between 720° and 1080° (2-3 full rotations) + random offset
       const randomSpins = 720 + Math.random() * 360;
