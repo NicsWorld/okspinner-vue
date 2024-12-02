@@ -1,5 +1,5 @@
 <script>
-import ConfettiExplosion from "vue-confetti-explosion"; // Correct import
+import ConfettiExplosion from "vue-confetti-explosion";
 import applauseSound from "../assets/applause.wav";
 export default {
   components: {
