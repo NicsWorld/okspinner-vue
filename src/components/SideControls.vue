@@ -38,11 +38,7 @@ export default {
   width: 250px;
   border: solid black;
   border-color: black;
-  background-color: #d3d3d3;
-  border-color: black;
-  border-width: 3px 4px 3px 5px;
   background-color: var(--main-red);
-  border-color: black;
   border-width: 3px 4px 3px 5px;
   position: absolute;
   left: 0;

@@ -12,7 +12,16 @@ export default {
     return {
       names: [],
       size: 600,
-      colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
+      // colors: ["#7CFC00", "#FF0000", "#0000FF", "#FFFF00", "#5D3FD3"],
+      // colors: [
+      //   "rgb(204, 204, 255)",
+      //   "rgb(255, 229, 180)",
+      //   "rgb(152, 251, 152)",
+      //   "rgb(173, 216, 230)",
+      //   "rgb(255, 153, 153)",
+      //   "rgb(255, 255, 224)",
+      // ],
+      colors: ["#1F51FF", "#39ff14", "#ff073a", "#FFEA00"],
       spin: 0,
       spinning: false,
       selectedName: null,
@@ -26,7 +35,6 @@ export default {
       let colorsToAssign = [...this.colors];
       const assignedColors = [];
 
-      // Fill the wheel sections with colors, ensuring no adjacent sections are the same color
       for (let i = 0; i < total; i++) {
         const color = colorsToAssign[i % colorsToAssign.length];
         assignedColors.push(color);
@@ -34,12 +42,10 @@ export default {
 
       // Check if the first and last colors are the same, and swap if necessary
       if (assignedColors[0] === assignedColors[assignedColors.length - 1]) {
-        // Swap the last color with a different color from the available colors
         let newColor = this.colors.find((c) => c !== assignedColors[0]);
         assignedColors[assignedColors.length - 1] = newColor;
       }
 
-      // Assign color to each section
       return this.names.map((_, index) => {
         return {
           start: index * anglePerSection,
@@ -64,7 +70,6 @@ export default {
     },
 
     removeWinner() {
-      // remove the winner from the list of names
       this.names = this.names.filter((name) => name !== this.selectedName);
       this.updateNames(this.names);
       this.selectedName = null;
@@ -94,7 +99,7 @@ export default {
       this.spinning = true;
       this.selectedName = null;
 
-      // // in assets folder, add a sound file named spin.wav
+      // bad
       // const sound = new Audio(spinSound);
       // sound.play();
 
@@ -105,8 +110,8 @@ export default {
       setTimeout(() => {
         this.spinning = false;
 
-        const finalAngle = ((this.spin % 360) + 360) % 360; // Normalize to 0-360
-        const pointerAngle = (360 - finalAngle + 270) % 360; // Align pointer to 6 o'clock
+        const finalAngle = ((this.spin % 360) + 360) % 360;
+        const pointerAngle = (360 - finalAngle + 270) % 360;
         const sectionAngle = 360 / this.names.length;
         let selectedIndex = -1;
 
@@ -119,14 +124,12 @@ export default {
           }
         }
 
-        // Fallback if something goes wrong
         if (selectedIndex === -1) {
           selectedIndex = 0;
         }
 
-        // Set the selected name
         this.selectedName = this.names[selectedIndex];
-      }, 2000); // Match the spin animation duration
+      }, 2000);
     },
   },
 };
@@ -167,12 +170,8 @@ export default {
             {{ name }}
           </text>
         </g>
-        <!-- Pointer repositioned to the 6 o'clock position -->
         <polygon points="295,10 305,10 300,30" fill="black" class="pointer" />
       </svg>
-    </div>
-    <div class="result-ticket" v-if="selectedName">
-      Winner: {{ selectedName }}
     </div>
     <button @click="spinWheel" class="spin-button">Spin!</button>
   </div>
@@ -181,7 +180,9 @@ export default {
 <style>
 .spinner-app {
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .wheel-container {
@@ -190,8 +191,12 @@ export default {
 }
 
 .wheel {
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   border-radius: 50%;
+
+  border: solid black;
+  border-color: black;
+  border-width: 2px 4px 3px 5px;
 }
 
 .wheel-group {
@@ -199,25 +204,32 @@ export default {
 }
 
 .pointer {
-  fill: #000; /* Black color for contrast */
-  stroke: #fff; /* White border for visibility */
+  fill: #000;
+  stroke: #fff;
   stroke-width: 2px;
 }
 
 .spin-button {
   margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 15px 30px;
+  font-size: 24px;
   cursor: pointer;
-  background-color: #008cba;
-  color: white;
+  background-color: var(--main-green);
+  color: black;
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s;
+
+  border: solid black;
+  border-color: black;
+  border-width: 3px 4px 3px 5px;
+  border-top-right-radius: 4% 95%;
+  border-top-right-radius: 4% 95%;
+  border-bottom-right-radius: 92% 6%;
 }
 
 .spin-button:hover {
-  background-color: #005f75;
+  opacity: 0.9;
 }
 
 .result-ticket {
