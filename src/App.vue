@@ -1,7 +1,7 @@
 <script>
 import SideControls from "./components/SideControls.vue";
 import WinnerModal from "./components/WinnerModal.vue";
-import spinSound from "./assets/spin.wav";
+// import spinSound from "./assets/spin.wav";
 
 export default {
   components: {
